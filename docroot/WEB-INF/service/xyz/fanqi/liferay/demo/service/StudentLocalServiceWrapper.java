@@ -293,6 +293,19 @@ public class StudentLocalServiceWrapper implements StudentLocalService,
 		return _studentLocalService.countByName(name);
 	}
 
+	@Override
+	public java.util.List<xyz.fanqi.liferay.demo.model.Student> findByNameAndNo(
+		java.lang.String name, java.lang.String no, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _studentLocalService.findByNameAndNo(name, no, start, end);
+	}
+
+	@Override
+	public int countByNameAndNo(java.lang.String name, java.lang.String no)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return _studentLocalService.countByNameAndNo(name, no);
+	}
+
 	/**
 	 * @deprecated As of 6.1.0, replaced by {@link #getWrappedService}
 	 */

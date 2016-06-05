@@ -256,4 +256,11 @@ public interface StudentLocalService extends BaseLocalService,
 
 	public int countByName(java.lang.String name)
 		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public java.util.List<xyz.fanqi.liferay.demo.model.Student> findByNameAndNo(
+		java.lang.String name, java.lang.String no, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public int countByNameAndNo(java.lang.String name, java.lang.String no)
+		throws com.liferay.portal.kernel.exception.SystemException;
 }

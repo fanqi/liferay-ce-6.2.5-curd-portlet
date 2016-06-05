@@ -34,9 +34,14 @@
 		</order>
 
 		<!-- Finder methods -->
-		
+
 		<finder name="Name" return-type="Collection">
-			<finder-column name="name" comparator="LIKE"/>
+			<finder-column name="name" comparator="LIKE" />
+		</finder>
+
+		<finder name="NameAndNo" return-type="Collection">
+			<finder-column name="name" comparator="LIKE" />
+			<finder-column name="no" comparator="LIKE" />
 		</finder>
 	</entity>
 </service-builder>

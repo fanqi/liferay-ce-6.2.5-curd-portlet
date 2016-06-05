@@ -55,4 +55,14 @@ public class StudentLocalServiceImpl extends StudentLocalServiceBaseImpl {
 	public int countByName(String name) throws SystemException {
 		return studentPersistence.countByName(name);
 	}
+
+	public List<Student> findByNameAndNo(String name, String no, int start,
+			int end) throws SystemException {
+		return studentPersistence.findByNameAndNo(name, no, start, end);
+	}
+
+	public int countByNameAndNo(String name, String no) throws SystemException {
+		return studentPersistence.countByNameAndNo(name, no);
+	}
+
 }

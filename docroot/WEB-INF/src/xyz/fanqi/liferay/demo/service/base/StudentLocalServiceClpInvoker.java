@@ -121,6 +121,18 @@ public class StudentLocalServiceClpInvoker {
 		_methodName41 = "countByName";
 
 		_methodParameterTypes41 = new String[] { "java.lang.String" };
+
+		_methodName42 = "findByNameAndNo";
+
+		_methodParameterTypes42 = new String[] {
+				"java.lang.String", "java.lang.String", "int", "int"
+			};
+
+		_methodName43 = "countByNameAndNo";
+
+		_methodParameterTypes43 = new String[] {
+				"java.lang.String", "java.lang.String"
+			};
 	}
 
 	public Object invokeMethod(String name, String[] parameterTypes,
@@ -236,6 +248,20 @@ public class StudentLocalServiceClpInvoker {
 			return StudentLocalServiceUtil.countByName((java.lang.String)arguments[0]);
 		}
 
+		if (_methodName42.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes42, parameterTypes)) {
+			return StudentLocalServiceUtil.findByNameAndNo((java.lang.String)arguments[0],
+				(java.lang.String)arguments[1],
+				((Integer)arguments[2]).intValue(),
+				((Integer)arguments[3]).intValue());
+		}
+
+		if (_methodName43.equals(name) &&
+				Arrays.deepEquals(_methodParameterTypes43, parameterTypes)) {
+			return StudentLocalServiceUtil.countByNameAndNo((java.lang.String)arguments[0],
+				(java.lang.String)arguments[1]);
+		}
+
 		throw new UnsupportedOperationException();
 	}
 
@@ -279,4 +305,8 @@ public class StudentLocalServiceClpInvoker {
 	private String[] _methodParameterTypes40;
 	private String _methodName41;
 	private String[] _methodParameterTypes41;
+	private String _methodName42;
+	private String[] _methodParameterTypes42;
+	private String _methodName43;
+	private String[] _methodParameterTypes43;
 }

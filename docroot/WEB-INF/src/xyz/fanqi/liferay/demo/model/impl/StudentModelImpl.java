@@ -95,7 +95,8 @@ public class StudentModelImpl extends BaseModelImpl<Student>
 				"value.object.column.bitmask.enabled.xyz.fanqi.liferay.demo.model.Student"),
 			true);
 	public static long NAME_COLUMN_BITMASK = 1L;
-	public static long CREATEDATE_COLUMN_BITMASK = 2L;
+	public static long NO_COLUMN_BITMASK = 2L;
+	public static long CREATEDATE_COLUMN_BITMASK = 4L;
 
 	/**
 	 * Converts the soap model instance into a normal model instance.
@@ -394,7 +395,17 @@ public class StudentModelImpl extends BaseModelImpl<Student>
 
 	@Override
 	public void setNo(String no) {
+		_columnBitmask |= NO_COLUMN_BITMASK;
+
+		if (_originalNo == null) {
+			_originalNo = _no;
+		}
+
 		_no = no;
+	}
+
+	public String getOriginalNo() {
+		return GetterUtil.getString(_originalNo);
 	}
 
 	@JSON
@@ -505,6 +516,8 @@ public class StudentModelImpl extends BaseModelImpl<Student>
 		StudentModelImpl studentModelImpl = this;
 
 		studentModelImpl._originalName = studentModelImpl._name;
+
+		studentModelImpl._originalNo = studentModelImpl._no;
 
 		studentModelImpl._columnBitmask = 0;
 	}
@@ -672,6 +685,7 @@ public class StudentModelImpl extends BaseModelImpl<Student>
 	private String _name;
 	private String _originalName;
 	private String _no;
+	private String _originalNo;
 	private String _gender;
 	private long _columnBitmask;
 	private Student _escapedModel;

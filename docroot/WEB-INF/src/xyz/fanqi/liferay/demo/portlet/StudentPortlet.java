@@ -32,13 +32,15 @@ public class StudentPortlet extends MVCPortlet {
 	public void doView(RenderRequest renderRequest,
 			RenderResponse renderResponse) throws IOException, PortletException {
 		try {
-			String keywords=ParamUtil.getString(renderRequest, "keywords");
+			String keywords = ParamUtil.getString(renderRequest, "keywords");
 			int delta = ParamUtil.getInteger(renderRequest, "delta", 5);
 			int cur = ParamUtil.getInteger(renderRequest, "cur", 1);
 			int start = delta * (cur - 1);
 			int end = delta * cur;
-			List<Student> students = StudentLocalServiceUtil.findByName("%"+keywords+"%", start, end);
-			int studentsCount = StudentLocalServiceUtil.countByName("%"+keywords+"%");
+			List<Student> students = StudentLocalServiceUtil.findByNameAndNo(
+					"%" + keywords + "%", "%" + keywords + "%", start, end);
+			int studentsCount = StudentLocalServiceUtil.countByNameAndNo("%"
+					+ keywords + "%", "%" + keywords + "%");
 			renderRequest.setAttribute("students", students);
 			renderRequest.setAttribute("studentsCount", studentsCount);
 			renderRequest.setAttribute("keywords", keywords);
