@@ -1,0 +1,6 @@
+<?xml version="1.0"?>
+<!DOCTYPE project>
+
+<project name="liferay-ce-6.2.5-curd-portlet" basedir="." default="deploy">
+	<import file="../build-common-portlet.xml" />
+</project>
