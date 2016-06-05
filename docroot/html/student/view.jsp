@@ -1,3 +1,4 @@
+<%@page import="javax.portlet.PortletURL"%>
 <%@page contentType="text/html;charset=utf-8"%>
 <%@ include file="/html/common/init.jsp"%>
 <portlet:renderURL var="viewURL" />
@@ -17,20 +18,23 @@
 		</aui:nav-bar-search>
 	</aui:nav-bar>
 	<aui:button-row>
-		<aui:button disabled="<%=true%>" name="deleteStudentsBtn" value="delete"
-			onClick='<%=renderResponse.getNamespace() + "deleteStudents();"%>'/>
+		<aui:button disabled="<%=true%>" name="deleteStudentsBtn"
+			value="delete"
+			onClick='<%=renderResponse.getNamespace() + "deleteStudents();"%>' />
 	</aui:button-row>
 	<liferay-ui:search-container
-		emptyResultsMessage="no-students-were-found" delta="5" rowChecker="<%=new RowChecker(renderResponse)%>">
+		emptyResultsMessage="no-students-were-found" delta="5"
+		orderByCol="${orderByCol }"
+		orderByType="${empty orderByType?'asc':orderByType }" rowChecker="<%=new RowChecker(renderResponse)%>">
 		<liferay-ui:search-container-results results="${students }"
 			total="${studentsCount }">
 		</liferay-ui:search-container-results>
 		<liferay-ui:search-container-row className="Student"
 			modelVar="student" keyProperty="studentId">
 			<liferay-ui:search-container-column-text property="name"
-				name="student-name" />
+				name="student-name" orderable="<%=true%>" orderableProperty="name" />
 			<liferay-ui:search-container-column-text property="no"
-				name="student-no" />
+				name="student-no" orderable="<%=true%>" orderableProperty="no" />
 			<liferay-ui:search-container-column-text name="gender">
 				<liferay-ui:message key="${student.gender}" />
 			</liferay-ui:search-container-column-text>
@@ -59,9 +63,15 @@
 				</liferay-ui:icon-menu>
 			</liferay-ui:search-container-column-text>
 		</liferay-ui:search-container-row>
-		<liferay-ui:search-iterator />
+		<liferay-ui:search-iterator>
+			<%
+		String orderByCol = (String)renderRequest.getAttribute("orderByCol");
+		PortletURL portletURL = searchContainer.getIteratorURL();
+		portletURL.setParameter("orderByCol", orderByCol);
+	%>
+		</liferay-ui:search-iterator>
 	</liferay-ui:search-container>
-</aui:form> 
+</aui:form>
 <portlet:actionURL var="deleteStudentsURL" name="deleteStudents">
 	<portlet:param name="redirect" value="${viewURL}" />
 </portlet:actionURL>
@@ -76,3 +86,7 @@
 			['liferay-util-list-fields']
 		);
 </aui:script>
+	
+
+
+

@@ -18,6 +18,7 @@ import com.liferay.counter.service.CounterLocalServiceUtil;
 import com.liferay.portal.kernel.dao.orm.DynamicQuery;
 import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.Junction;
+import com.liferay.portal.kernel.dao.orm.OrderFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
 import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
@@ -43,15 +44,20 @@ public class StudentPortlet extends MVCPortlet {
 			int cur = ParamUtil.getInteger(renderRequest, "cur", 1);
 			int start = delta * (cur - 1);
 			int end = delta * cur;
+			String orderByCol = ParamUtil.getString(renderRequest,
+					"orderByCol", "");
+			String orderByType = ParamUtil.getString(renderRequest,
+					"orderByType", "");
 			List<Student> students = StudentLocalServiceUtil.dynamicQuery(
-					createDynamicQueryByKeywords("%" + keywords + "%"), start,
-					end);
+					createDynamicQueryByKeywords("%" + keywords + "%",
+							orderByCol, orderByType), start, end);
 			int studentsCount = (int) StudentLocalServiceUtil
 					.dynamicQueryCount(createDynamicQueryByKeywords("%"
-							+ keywords + "%"));
+							+ keywords + "%", orderByCol, orderByType));
 			renderRequest.setAttribute("students", students);
 			renderRequest.setAttribute("studentsCount", studentsCount);
-			renderRequest.setAttribute("keywords", keywords);
+			renderRequest.setAttribute("orderByCol", orderByCol);
+			renderRequest.setAttribute("orderByType", orderByType);
 		} catch (SystemException e) {
 			e.printStackTrace();
 		}
@@ -113,13 +119,21 @@ public class StudentPortlet extends MVCPortlet {
 		}
 	}
 
-	public DynamicQuery createDynamicQueryByKeywords(String keywords) {
+	public DynamicQuery createDynamicQueryByKeywords(String keywords,
+			String orderByCol, String orderByType) {
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil
 				.forClass(Student.class);
 		Junction junction = RestrictionsFactoryUtil.disjunction();
 		junction.add(PropertyFactoryUtil.forName("name").like(keywords));
 		junction.add(PropertyFactoryUtil.forName("no").like(keywords));
 		dynamicQuery.add(junction);
+		if (!Validator.isBlank(orderByCol)) {
+			if (orderByType.equals("asc")) {
+				dynamicQuery.addOrder(OrderFactoryUtil.asc(orderByCol));
+			} else if (orderByType.equals("desc")) {
+				dynamicQuery.addOrder(OrderFactoryUtil.desc(orderByCol));
+			}
+		}
 		return dynamicQuery;
 	}
 }
