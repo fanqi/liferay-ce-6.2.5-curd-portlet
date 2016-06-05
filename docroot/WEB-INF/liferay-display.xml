@@ -3,4 +3,7 @@
 
 <display>
 	
+	<category name="demo">
+		<portlet id="student"></portlet>
+	</category>
 </display>
