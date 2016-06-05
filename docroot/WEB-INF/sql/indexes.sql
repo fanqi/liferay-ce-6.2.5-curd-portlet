@@ -1,0 +1,1 @@
+create index IX_65FB0205 on CURD_Student (name);
