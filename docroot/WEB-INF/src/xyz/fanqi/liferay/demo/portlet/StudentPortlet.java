@@ -15,6 +15,11 @@ import xyz.fanqi.liferay.demo.model.Student;
 import xyz.fanqi.liferay.demo.service.StudentLocalServiceUtil;
 
 import com.liferay.counter.service.CounterLocalServiceUtil;
+import com.liferay.portal.kernel.dao.orm.DynamicQuery;
+import com.liferay.portal.kernel.dao.orm.DynamicQueryFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.Junction;
+import com.liferay.portal.kernel.dao.orm.PropertyFactoryUtil;
+import com.liferay.portal.kernel.dao.orm.RestrictionsFactoryUtil;
 import com.liferay.portal.kernel.exception.PortalException;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.util.ParamUtil;
@@ -32,15 +37,18 @@ public class StudentPortlet extends MVCPortlet {
 	public void doView(RenderRequest renderRequest,
 			RenderResponse renderResponse) throws IOException, PortletException {
 		try {
-			String keywords = ParamUtil.getString(renderRequest, "keywords");
+			String keywords = ParamUtil
+					.getString(renderRequest, "keywords", "");
 			int delta = ParamUtil.getInteger(renderRequest, "delta", 5);
 			int cur = ParamUtil.getInteger(renderRequest, "cur", 1);
 			int start = delta * (cur - 1);
 			int end = delta * cur;
-			List<Student> students = StudentLocalServiceUtil.findByNameAndNo(
-					"%" + keywords + "%", "%" + keywords + "%", start, end);
-			int studentsCount = StudentLocalServiceUtil.countByNameAndNo("%"
-					+ keywords + "%", "%" + keywords + "%");
+			List<Student> students = StudentLocalServiceUtil.dynamicQuery(
+					createDynamicQueryByKeywords("%" + keywords + "%"), start,
+					end);
+			int studentsCount = (int) StudentLocalServiceUtil
+					.dynamicQueryCount(createDynamicQueryByKeywords("%"
+							+ keywords + "%"));
 			renderRequest.setAttribute("students", students);
 			renderRequest.setAttribute("studentsCount", studentsCount);
 			renderRequest.setAttribute("keywords", keywords);
@@ -92,5 +100,15 @@ public class StudentPortlet extends MVCPortlet {
 			PortletException, PortalException, SystemException {
 		long studentId = ParamUtil.getLong(actionRequest, "studentId");
 		StudentLocalServiceUtil.deleteStudent(studentId);
+	}
+
+	public DynamicQuery createDynamicQueryByKeywords(String keywords) {
+		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil
+				.forClass(Student.class);
+		Junction junction = RestrictionsFactoryUtil.disjunction();
+		junction.add(PropertyFactoryUtil.forName("name").like(keywords));
+		junction.add(PropertyFactoryUtil.forName("no").like(keywords));
+		dynamicQuery.add(junction);
+		return dynamicQuery;
 	}
 }
