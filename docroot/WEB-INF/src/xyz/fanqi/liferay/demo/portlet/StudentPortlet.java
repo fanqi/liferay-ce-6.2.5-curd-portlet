@@ -102,6 +102,17 @@ public class StudentPortlet extends MVCPortlet {
 		StudentLocalServiceUtil.deleteStudent(studentId);
 	}
 
+	public void deleteStudents(ActionRequest actionRequest,
+			ActionResponse actionResponse) throws IOException,
+			PortletException, PortalException, SystemException {
+		String deleteStudentIds = ParamUtil.getString(actionRequest,
+				"studentIds");
+		String[] studentIds = deleteStudentIds.split(",");
+		for (String studentId : studentIds) {
+			StudentLocalServiceUtil.deleteStudent(Long.parseLong(studentId));
+		}
+	}
+
 	public DynamicQuery createDynamicQueryByKeywords(String keywords) {
 		DynamicQuery dynamicQuery = DynamicQueryFactoryUtil
 				.forClass(Student.class);

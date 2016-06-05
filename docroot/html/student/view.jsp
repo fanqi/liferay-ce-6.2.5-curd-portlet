@@ -8,7 +8,7 @@
 				<portlet:param name="mvcPath" value="/html/student/edit_student.jsp" />
 			</portlet:renderURL>
 			<aui:nav-item href="<%=addStudentURL%>" iconCssClass="icon-plus"
-				label="add-student" />
+				label="add" />
 		</aui:nav>
 		<aui:nav-bar-search cssClass="pull-right">
 			<div class="form-search">
@@ -16,10 +16,14 @@
 			</div>
 		</aui:nav-bar-search>
 	</aui:nav-bar>
+	<aui:button-row>
+		<aui:button disabled="<%=true%>" name="deleteStudentsBtn" value="delete"
+			onClick='<%=renderResponse.getNamespace() + "deleteStudents();"%>'/>
+	</aui:button-row>
 	<liferay-ui:search-container
-		emptyResultsMessage="no-students-were-found" delta="5">
+		emptyResultsMessage="no-students-were-found" delta="5" rowChecker="<%=new RowChecker(renderResponse)%>">
 		<liferay-ui:search-container-results results="${students }"
-			total="${studentsCount }" >
+			total="${studentsCount }">
 		</liferay-ui:search-container-results>
 		<liferay-ui:search-container-row className="Student"
 			modelVar="student" keyProperty="studentId">
@@ -57,5 +61,18 @@
 		</liferay-ui:search-container-row>
 		<liferay-ui:search-iterator />
 	</liferay-ui:search-container>
-</aui:form>
-
+</aui:form> 
+<portlet:actionURL var="deleteStudentsURL" name="deleteStudents">
+	<portlet:param name="redirect" value="${viewURL}" />
+</portlet:actionURL>
+<aui:script>
+	Liferay.Util.toggleSearchContainerButton('#<portlet:namespace />deleteStudentsBtn', '#<portlet:namespace /><%=searchContainerReference.getId("searchContainer")%>SearchContainer', document.<portlet:namespace />fm, '<portlet:namespace />allRowIds');
+	Liferay.provide(
+			window,
+			'<portlet:namespace />deleteStudents',
+			function() {
+				location.href="<%=deleteStudentsURL%>&<portlet:namespace />studentIds="+ Liferay.Util.listCheckedExcept(document.<portlet:namespace />fm, '<portlet:namespace />allRowIds');
+			},
+			['liferay-util-list-fields']
+		);
+</aui:script>
