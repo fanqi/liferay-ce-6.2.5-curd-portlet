@@ -275,6 +275,17 @@ public class StudentLocalServiceUtil {
 		return getService().invokeMethod(name, parameterTypes, arguments);
 	}
 
+	public static java.util.List<xyz.fanqi.liferay.demo.model.Student> findByName(
+		java.lang.String name, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().findByName(name, start, end);
+	}
+
+	public static int countByName(java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException {
+		return getService().countByName(name);
+	}
+
 	public static void clearService() {
 		_service = null;
 	}

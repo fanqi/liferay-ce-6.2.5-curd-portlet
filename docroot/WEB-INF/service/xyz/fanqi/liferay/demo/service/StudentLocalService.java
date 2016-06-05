@@ -249,4 +249,11 @@ public interface StudentLocalService extends BaseLocalService,
 	public java.lang.Object invokeMethod(java.lang.String name,
 		java.lang.String[] parameterTypes, java.lang.Object[] arguments)
 		throws java.lang.Throwable;
+
+	public java.util.List<xyz.fanqi.liferay.demo.model.Student> findByName(
+		java.lang.String name, int start, int end)
+		throws com.liferay.portal.kernel.exception.SystemException;
+
+	public int countByName(java.lang.String name)
+		throws com.liferay.portal.kernel.exception.SystemException;
 }

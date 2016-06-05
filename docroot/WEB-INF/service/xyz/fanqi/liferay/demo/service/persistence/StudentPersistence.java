@@ -38,7 +38,7 @@ public interface StudentPersistence extends BasePersistence<Student> {
 	 */
 
 	/**
-	* Returns all the students where name = &#63;.
+	* Returns all the students where name LIKE &#63;.
 	*
 	* @param name the name
 	* @return the matching students
@@ -49,7 +49,7 @@ public interface StudentPersistence extends BasePersistence<Student> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns a range of all the students where name = &#63;.
+	* Returns a range of all the students where name LIKE &#63;.
 	*
 	* <p>
 	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link xyz.fanqi.liferay.demo.model.impl.StudentModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
@@ -66,7 +66,7 @@ public interface StudentPersistence extends BasePersistence<Student> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns an ordered range of all the students where name = &#63;.
+	* Returns an ordered range of all the students where name LIKE &#63;.
 	*
 	* <p>
 	* Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link xyz.fanqi.liferay.demo.model.impl.StudentModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
@@ -85,7 +85,7 @@ public interface StudentPersistence extends BasePersistence<Student> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the first student in the ordered set where name = &#63;.
+	* Returns the first student in the ordered set where name LIKE &#63;.
 	*
 	* @param name the name
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -100,7 +100,7 @@ public interface StudentPersistence extends BasePersistence<Student> {
 			xyz.fanqi.liferay.demo.NoSuchStudentException;
 
 	/**
-	* Returns the first student in the ordered set where name = &#63;.
+	* Returns the first student in the ordered set where name LIKE &#63;.
 	*
 	* @param name the name
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -113,7 +113,7 @@ public interface StudentPersistence extends BasePersistence<Student> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the last student in the ordered set where name = &#63;.
+	* Returns the last student in the ordered set where name LIKE &#63;.
 	*
 	* @param name the name
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -128,7 +128,7 @@ public interface StudentPersistence extends BasePersistence<Student> {
 			xyz.fanqi.liferay.demo.NoSuchStudentException;
 
 	/**
-	* Returns the last student in the ordered set where name = &#63;.
+	* Returns the last student in the ordered set where name LIKE &#63;.
 	*
 	* @param name the name
 	* @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -141,7 +141,7 @@ public interface StudentPersistence extends BasePersistence<Student> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the students before and after the current student in the ordered set where name = &#63;.
+	* Returns the students before and after the current student in the ordered set where name LIKE &#63;.
 	*
 	* @param studentId the primary key of the current student
 	* @param name the name
@@ -157,7 +157,7 @@ public interface StudentPersistence extends BasePersistence<Student> {
 			xyz.fanqi.liferay.demo.NoSuchStudentException;
 
 	/**
-	* Removes all the students where name = &#63; from the database.
+	* Removes all the students where name LIKE &#63; from the database.
 	*
 	* @param name the name
 	* @throws SystemException if a system exception occurred
@@ -166,7 +166,7 @@ public interface StudentPersistence extends BasePersistence<Student> {
 		throws com.liferay.portal.kernel.exception.SystemException;
 
 	/**
-	* Returns the number of students where name = &#63;.
+	* Returns the number of students where name LIKE &#63;.
 	*
 	* @param name the name
 	* @return the number of matching students

@@ -25,6 +25,7 @@ import com.liferay.portal.kernel.dao.orm.Session;
 import com.liferay.portal.kernel.exception.SystemException;
 import com.liferay.portal.kernel.log.Log;
 import com.liferay.portal.kernel.log.LogFactoryUtil;
+import com.liferay.portal.kernel.util.CharPool;
 import com.liferay.portal.kernel.util.GetterUtil;
 import com.liferay.portal.kernel.util.InstanceFactory;
 import com.liferay.portal.kernel.util.OrderByComparator;
@@ -34,7 +35,6 @@ import com.liferay.portal.kernel.util.StringBundler;
 import com.liferay.portal.kernel.util.StringPool;
 import com.liferay.portal.kernel.util.StringUtil;
 import com.liferay.portal.kernel.util.UnmodifiableList;
-import com.liferay.portal.kernel.util.Validator;
 import com.liferay.portal.model.CacheModel;
 import com.liferay.portal.model.ModelListener;
 import com.liferay.portal.service.persistence.impl.BasePersistenceImpl;
@@ -92,19 +92,13 @@ public class StudentPersistenceImpl extends BasePersistenceImpl<Student>
 			Integer.class.getName(), Integer.class.getName(),
 				OrderByComparator.class.getName()
 			});
-	public static final FinderPath FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NAME = new FinderPath(StudentModelImpl.ENTITY_CACHE_ENABLED,
-			StudentModelImpl.FINDER_CACHE_ENABLED, StudentImpl.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "findByName",
-			new String[] { String.class.getName() },
-			StudentModelImpl.NAME_COLUMN_BITMASK |
-			StudentModelImpl.CREATEDATE_COLUMN_BITMASK);
-	public static final FinderPath FINDER_PATH_COUNT_BY_NAME = new FinderPath(StudentModelImpl.ENTITY_CACHE_ENABLED,
+	public static final FinderPath FINDER_PATH_WITH_PAGINATION_COUNT_BY_NAME = new FinderPath(StudentModelImpl.ENTITY_CACHE_ENABLED,
 			StudentModelImpl.FINDER_CACHE_ENABLED, Long.class,
-			FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION, "countByName",
+			FINDER_CLASS_NAME_LIST_WITH_PAGINATION, "countByName",
 			new String[] { String.class.getName() });
 
 	/**
-	 * Returns all the students where name = &#63;.
+	 * Returns all the students where name LIKE &#63;.
 	 *
 	 * @param name the name
 	 * @return the matching students
@@ -116,7 +110,7 @@ public class StudentPersistenceImpl extends BasePersistenceImpl<Student>
 	}
 
 	/**
-	 * Returns a range of all the students where name = &#63;.
+	 * Returns a range of all the students where name LIKE &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link xyz.fanqi.liferay.demo.model.impl.StudentModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
@@ -135,7 +129,7 @@ public class StudentPersistenceImpl extends BasePersistenceImpl<Student>
 	}
 
 	/**
-	 * Returns an ordered range of all the students where name = &#63;.
+	 * Returns an ordered range of all the students where name LIKE &#63;.
 	 *
 	 * <p>
 	 * Useful when paginating results. Returns a maximum of <code>end - start</code> instances. <code>start</code> and <code>end</code> are not primary keys, they are indexes in the result set. Thus, <code>0</code> refers to the first result in the set. Setting both <code>start</code> and <code>end</code> to {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS} will return the full result set. If <code>orderByComparator</code> is specified, then the query will include the given ORDER BY logic. If <code>orderByComparator</code> is absent and pagination is required (<code>start</code> and <code>end</code> are not {@link com.liferay.portal.kernel.dao.orm.QueryUtil#ALL_POS}), then the query will include the default ORDER BY logic from {@link xyz.fanqi.liferay.demo.model.impl.StudentModelImpl}. If both <code>orderByComparator</code> and pagination are absent, for performance reasons, the query will not have an ORDER BY clause and the returned result set will be sorted on by the primary key in an ascending order.
@@ -155,23 +149,17 @@ public class StudentPersistenceImpl extends BasePersistenceImpl<Student>
 		FinderPath finderPath = null;
 		Object[] finderArgs = null;
 
-		if ((start == QueryUtil.ALL_POS) && (end == QueryUtil.ALL_POS) &&
-				(orderByComparator == null)) {
-			pagination = false;
-			finderPath = FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NAME;
-			finderArgs = new Object[] { name };
-		}
-		else {
-			finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_NAME;
-			finderArgs = new Object[] { name, start, end, orderByComparator };
-		}
+		finderPath = FINDER_PATH_WITH_PAGINATION_FIND_BY_NAME;
+		finderArgs = new Object[] { name, start, end, orderByComparator };
 
 		List<Student> list = (List<Student>)FinderCacheUtil.getResult(finderPath,
 				finderArgs, this);
 
 		if ((list != null) && !list.isEmpty()) {
 			for (Student student : list) {
-				if (!Validator.equals(name, student.getName())) {
+				if (!StringUtil.wildcardMatches(student.getName(), name,
+							CharPool.UNDERLINE, CharPool.PERCENT,
+							CharPool.BACK_SLASH, true)) {
 					list = null;
 
 					break;
@@ -261,7 +249,7 @@ public class StudentPersistenceImpl extends BasePersistenceImpl<Student>
 	}
 
 	/**
-	 * Returns the first student in the ordered set where name = &#63;.
+	 * Returns the first student in the ordered set where name LIKE &#63;.
 	 *
 	 * @param name the name
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -292,7 +280,7 @@ public class StudentPersistenceImpl extends BasePersistenceImpl<Student>
 	}
 
 	/**
-	 * Returns the first student in the ordered set where name = &#63;.
+	 * Returns the first student in the ordered set where name LIKE &#63;.
 	 *
 	 * @param name the name
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -312,7 +300,7 @@ public class StudentPersistenceImpl extends BasePersistenceImpl<Student>
 	}
 
 	/**
-	 * Returns the last student in the ordered set where name = &#63;.
+	 * Returns the last student in the ordered set where name LIKE &#63;.
 	 *
 	 * @param name the name
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -343,7 +331,7 @@ public class StudentPersistenceImpl extends BasePersistenceImpl<Student>
 	}
 
 	/**
-	 * Returns the last student in the ordered set where name = &#63;.
+	 * Returns the last student in the ordered set where name LIKE &#63;.
 	 *
 	 * @param name the name
 	 * @param orderByComparator the comparator to order the set by (optionally <code>null</code>)
@@ -370,7 +358,7 @@ public class StudentPersistenceImpl extends BasePersistenceImpl<Student>
 	}
 
 	/**
-	 * Returns the students before and after the current student in the ordered set where name = &#63;.
+	 * Returns the students before and after the current student in the ordered set where name LIKE &#63;.
 	 *
 	 * @param studentId the primary key of the current student
 	 * @param name the name
@@ -529,7 +517,7 @@ public class StudentPersistenceImpl extends BasePersistenceImpl<Student>
 	}
 
 	/**
-	 * Removes all the students where name = &#63; from the database.
+	 * Removes all the students where name LIKE &#63; from the database.
 	 *
 	 * @param name the name
 	 * @throws SystemException if a system exception occurred
@@ -543,7 +531,7 @@ public class StudentPersistenceImpl extends BasePersistenceImpl<Student>
 	}
 
 	/**
-	 * Returns the number of students where name = &#63;.
+	 * Returns the number of students where name LIKE &#63;.
 	 *
 	 * @param name the name
 	 * @return the number of matching students
@@ -551,7 +539,7 @@ public class StudentPersistenceImpl extends BasePersistenceImpl<Student>
 	 */
 	@Override
 	public int countByName(String name) throws SystemException {
-		FinderPath finderPath = FINDER_PATH_COUNT_BY_NAME;
+		FinderPath finderPath = FINDER_PATH_WITH_PAGINATION_COUNT_BY_NAME;
 
 		Object[] finderArgs = new Object[] { name };
 
@@ -609,9 +597,9 @@ public class StudentPersistenceImpl extends BasePersistenceImpl<Student>
 		return count.intValue();
 	}
 
-	private static final String _FINDER_COLUMN_NAME_NAME_1 = "student.name IS NULL";
-	private static final String _FINDER_COLUMN_NAME_NAME_2 = "student.name = ?";
-	private static final String _FINDER_COLUMN_NAME_NAME_3 = "(student.name IS NULL OR student.name = '')";
+	private static final String _FINDER_COLUMN_NAME_NAME_1 = "student.name LIKE NULL";
+	private static final String _FINDER_COLUMN_NAME_NAME_2 = "student.name LIKE ?";
+	private static final String _FINDER_COLUMN_NAME_NAME_3 = "(student.name IS NULL OR student.name LIKE '')";
 
 	public StudentPersistenceImpl() {
 		setModelClass(Student.class);
@@ -805,8 +793,6 @@ public class StudentPersistenceImpl extends BasePersistenceImpl<Student>
 
 		boolean isNew = student.isNew();
 
-		StudentModelImpl studentModelImpl = (StudentModelImpl)student;
-
 		Session session = null;
 
 		try {
@@ -832,23 +818,6 @@ public class StudentPersistenceImpl extends BasePersistenceImpl<Student>
 
 		if (isNew || !StudentModelImpl.COLUMN_BITMASK_ENABLED) {
 			FinderCacheUtil.clearCache(FINDER_CLASS_NAME_LIST_WITHOUT_PAGINATION);
-		}
-
-		else {
-			if ((studentModelImpl.getColumnBitmask() &
-					FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NAME.getColumnBitmask()) != 0) {
-				Object[] args = new Object[] { studentModelImpl.getOriginalName() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_NAME, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NAME,
-					args);
-
-				args = new Object[] { studentModelImpl.getName() };
-
-				FinderCacheUtil.removeResult(FINDER_PATH_COUNT_BY_NAME, args);
-				FinderCacheUtil.removeResult(FINDER_PATH_WITHOUT_PAGINATION_FIND_BY_NAME,
-					args);
-			}
 		}
 
 		EntityCacheUtil.putResult(StudentModelImpl.ENTITY_CACHE_ENABLED,
