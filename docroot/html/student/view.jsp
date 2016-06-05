@@ -2,27 +2,24 @@
 <%@ include file="/html/common/init.jsp"%>
 <portlet:renderURL var="viewURL" />
 <aui:form action="${viewURL }" name="fm">
+	<aui:nav-bar>
+		<aui:nav>
+			<portlet:renderURL var="addStudentURL">
+				<portlet:param name="mvcPath" value="/html/student/edit_student.jsp" />
+			</portlet:renderURL>
+			<aui:nav-item href="<%=addStudentURL%>" iconCssClass="icon-plus"
+				label="add-student" />
+		</aui:nav>
+		<aui:nav-bar-search cssClass="pull-right">
+			<div class="form-search">
+				<liferay-ui:input-search />
+			</div>
+		</aui:nav-bar-search>
+	</aui:nav-bar>
 	<liferay-ui:search-container
 		emptyResultsMessage="no-students-were-found" delta="5">
-		<aui:nav-bar>
-			<aui:nav>
-				<portlet:renderURL var="addStudentURL">
-					<portlet:param name="mvcPath"
-						value="/html/student/edit_student.jsp" />
-				</portlet:renderURL>
-				<aui:nav-item href="<%=addStudentURL%>" iconCssClass="icon-plus"
-					label="add-student" />
-			</aui:nav>
-			<aui:nav-bar-search cssClass="pull-right"
-				searchContainer="<%=searchContainer%>">
-				
-				<div class="form-search">
-					<liferay-ui:input-search />
-				</div>
-			</aui:nav-bar-search>
-		</aui:nav-bar>
 		<liferay-ui:search-container-results results="${students }"
-			total="${studentsCount }">
+			total="${studentsCount }" >
 		</liferay-ui:search-container-results>
 		<liferay-ui:search-container-row className="Student"
 			modelVar="student" keyProperty="studentId">
